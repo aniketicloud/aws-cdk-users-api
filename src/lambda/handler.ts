@@ -1,10 +1,36 @@
-import { APIGatewayProxyEventV2 } from "aws-lambda";
+import {
+  APIGatewayProxyEventV2,
+  APIGatewayProxyResult,
+  APIGatewayProxyResultV2,
+} from "aws-lambda";
 
-const getAllUsers = async (event: APIGatewayProxyEventV2) => {
-  return { message: "Get All Users" };
+export const handler = async (
+  event: APIGatewayProxyEventV2
+): Promise<APIGatewayProxyResult> => {
+  const method = event.requestContext.http.method;
+  const path = event.requestContext.http.path;
+
+  try {
+    if (path === "/users") {
+      switch (method) {
+        case "GET":
+          return getAllUsers(event);
+          break;
+
+        default:
+          break;
+      }
+    }
+  } catch (error) {}
 };
 
-const getUser = async (event: APIGatewayProxyEventV2) => { 
-  const userId = event.pathParameters?.userId;
-  return { message: `Get User with ID: ${userId}` };
-}
+const getAllUsers = async (
+  event: APIGatewayProxyEventV2
+): Promise<APIGatewayProxyResult> => {
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: "Get All Users",
+    }),
+  };
+};
