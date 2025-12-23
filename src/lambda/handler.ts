@@ -15,10 +15,14 @@ export const handler = async (
       switch (method) {
         case "GET":
           return getAllUsers(event);
-          break;
+        case "POST":
+          return addUser(event);
 
         default:
-          break;
+          return {
+            statusCode: 405,
+            body: JSON.stringify({ message: "Method not allowed" }),
+          };
       }
     }
   } catch (error) {}
@@ -31,6 +35,17 @@ const getAllUsers = async (
     statusCode: 200,
     body: JSON.stringify({
       message: "Get All Users",
+    }),
+  };
+};
+
+const addUser = async (
+  event: APIGatewayProxyEventV2
+): Promise<APIGatewayProxyResult> => {
+  return {
+    statusCode: 201,
+    body: JSON.stringify({
+      message: "Add User",
     }),
   };
 };
